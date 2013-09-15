@@ -1,0 +1,48 @@
+<span>Project <%= @project.name %></span>
+<p class="subtitle"><%= l(:label_date_from_to, :start => format_date(@date_to), :end => format_date(@date_to-1)) %></p>
+
+<% if @events_by_day && @events_by_day.any? %>
+<table class="list">
+  <thead>
+    <tr>
+      <th>Project</th>
+      <th>Date</th>
+      <th>User</th>
+      <th>Activity</th>
+      <th>Issue</th>
+      <th>Comment</th>
+      <th>Hours Spent</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @events_by_day.keys.sort.reverse.each do |day| %>
+      <% sort_activity_events(@events_by_day[day]).each do |e, in_group| -%>
+        <% if e.class.name == "TimeEntry" %>
+          <tr>
+            <td><%= e.project.name %></td>
+            <td><%= e.spent_on %></td>
+            <td><%= e.user.name %></td>
+            <td><%= e.class.name %></td>
+            <td><%= e.issue.subject %></td>
+            <td><%= e.comments %></td>
+            <td><%= e.hours %></td>
+          </tr>
+        <% else %>
+          <tr>
+            <td><%= e.project.name %></td>
+            <td><%= e.created_on %></td>
+            <td><%= e.author.name %></td>
+            <td><%= e.tracker.name %></td>
+            <td><%= e.subject %></td>
+            <td><%= e.description %></td>
+            <td><%= '-' %></td>
+          </tr>
+        <% end -%>
+      <% end -%>
+      </dl>
+    <% end -%>
+  </tbody>
+</table>
+<% else %>
+  <%= content_tag('p', l(:label_no_data), :class => 'nodata') %>
+<% end -%>

@@ -1,0 +1,39 @@
+<table>
+  <tbody>
+    <tr>
+      <th>Notification Addresses</th>
+      <td><input type="text" id="settings_notification_addresses"
+           value="<%= settings['notification_addresses'] %>"
+           name="settings[notification_addresses]"/>
+      </td>
+    </tr>
+    <tr>
+      <th>Notification Time</th>
+      <td><input type="time" id="settings_notification_time"
+           value="<%= settings['notification_time'] %>"
+           name="settings[notification_time]"/>
+      </td>
+    </tr>
+    <tr>
+      <th>Project ID</th>
+      <td><input type="text" id="settings_project_id"
+           value="<%= settings['project_id'] %>"
+           name="settings[project_id]"/>
+      </td>
+    </tr>
+    <tr>
+      <th>How many days back</th>
+      <td><input type="number" id="settings_days_back"
+           value="<%= settings['days_back'] %>"
+           name="settings[days_back]"/>
+      </td>
+    </tr>
+    <tr>
+      <th>Include subprojects?</th>
+      <td><input type="checkbox" id="settings_include_subprojects"
+           value="<%= settings['include_subprojects'] ? true : false %>"
+           name="settings[include_subprojects]" <%= settings['include_subprojects'] ? 'checked="checked"' : '' %> />
+      </td>
+    </tr>
+  </tbody>
+</table>
