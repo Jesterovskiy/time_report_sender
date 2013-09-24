@@ -24,7 +24,7 @@ module MailerPatch
     WITH_SUBPROJECTS = true
 
     def send_time_report(email)
-      @user = User.find(1)
+      @user = User.where(login: 'admin').first
       @project = Project.find(Setting.plugin_time_report_sender['project_id'])
       @days = Setting.plugin_time_report_sender['days_back'].to_i || DAYS_BACK
       @date_to ||= Date.today + 1
@@ -37,7 +37,7 @@ module MailerPatch
                                                        :author => @author)
       #@activity.scope_select {|t| !params["show_#{t}"].nil?}
       #@activity.scope = (@author.nil? ? :default : :all) if @activity.scope.empty?
-      activity.scope = :all
+      activity.scope = ["issues", "time_entries"]
 
       events = activity.events(@date_from, @date_to)
       @events_by_day = events.group_by {|event| @user.time_to_date(event.event_datetime)}

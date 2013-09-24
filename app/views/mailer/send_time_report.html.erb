@@ -1,8 +1,8 @@
 <span>Project <%= @project.name %></span>
-<p class="subtitle"><%= l(:label_date_from_to, :start => format_date(@date_to), :end => format_date(@date_to-1)) %></p>
+<p class="subtitle"><%= l(:label_date_from_to, :start => format_date(@date_to), :end => format_date(@date_from)) %></p>
 
 <% if @events_by_day && @events_by_day.any? %>
-<table class="list">
+<table width="100%" border="1" cellspacing="0" cellpadding="4">
   <thead>
     <tr>
       <th>Project</th>
@@ -16,7 +16,7 @@
   </thead>
   <tbody>
     <% @events_by_day.keys.sort.reverse.each do |day| %>
-      <% sort_activity_events(@events_by_day[day]).each do |e, in_group| -%>
+      <% @events_by_day[day].each do |e| -%>
         <% if e.class.name == "TimeEntry" %>
           <tr>
             <td><%= e.project.name %></td>
@@ -27,7 +27,8 @@
             <td><%= e.comments %></td>
             <td><%= e.hours %></td>
           </tr>
-        <% else %>
+        <% end -%>
+        <% if e.class.name == "Issue" %>
           <tr>
             <td><%= e.project.name %></td>
             <td><%= e.created_on %></td>
