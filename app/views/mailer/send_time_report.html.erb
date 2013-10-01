@@ -17,7 +17,7 @@
   <tbody>
     <% @events_by_day.keys.sort.reverse.each do |day| %>
       <% @events_by_day[day].each do |e| -%>
-        <% if e.class.name == "TimeEntry" %>
+        <% if e.class.name == "TimeEntry" && (e.created_on.to_date == e.spent_on || e.spent_on == Date.yesterday) %>
           <tr>
             <td><%= e.project.name %></td>
             <td><%= e.spent_on %></td>

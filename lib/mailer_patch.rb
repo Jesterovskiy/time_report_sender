@@ -27,7 +27,7 @@ module MailerPatch
       @user = User.where(login: 'admin').first
       @project = Project.find(Setting.plugin_time_report_sender['project_id'])
       @days = Setting.plugin_time_report_sender['days_back'].to_i || DAYS_BACK
-      @date_to ||= Date.today + 1
+      @date_to ||= Date.today
       @date_from = @date_to - @days
       @with_subprojects = Setting.plugin_time_report_sender['include_subprojects'] || WITH_SUBPROJECTS
       @author = nil
