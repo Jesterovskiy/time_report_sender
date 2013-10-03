@@ -24,25 +24,25 @@ module MailerPatch
     WITH_SUBPROJECTS = true
 
     def send_time_report(email)
+      set_language_if_valid "ru"
       @user = User.where(login: 'admin').first
       @project = Project.find(Setting.plugin_time_report_sender['project_id'])
       @days = Setting.plugin_time_report_sender['days_back'].to_i || DAYS_BACK
       @date_to ||= Date.today
       @date_from = @date_to - @days
       @with_subprojects = Setting.plugin_time_report_sender['include_subprojects'] || WITH_SUBPROJECTS
-      @author = nil
 
       activity = Redmine::Activity::Fetcher.new(@user, :project => @project,
                                                        :with_subprojects => @with_subprojects,
-                                                       :author => @author)
-      #@activity.scope_select {|t| !params["show_#{t}"].nil?}
-      #@activity.scope = (@author.nil? ? :default : :all) if @activity.scope.empty?
-      activity.scope = ["issues", "time_entries"]
+                                                       :author => @user)
+      activity.scope = ["time_entries"]
 
       events = activity.events(@date_from, @date_to)
       @events_by_day = events.group_by {|event| @user.time_to_date(event.event_datetime)}
+      @hours = 0
+      events.each {|e| @hours = @hours + e.hours.to_i if e.hours && (e.spent_on == Date.yesterday)}
 
-      mail :to => email, :subject => "#{@project.name} report"
+      mail :to => email, :subject => "#{@project.name} #{@date_from}"
     end
   end
 end

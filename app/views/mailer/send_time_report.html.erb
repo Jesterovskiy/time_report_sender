@@ -1,30 +1,25 @@
-<span>Project <%= @project.name %></span>
-<p class="subtitle"><%= l(:label_date_from_to, :start => format_date(@date_to), :end => format_date(@date_from)) %></p>
+<p class="subtitle"><%= 'Отчет использования времени по проекту ' + @project.name + ' за ' + format_date(@date_from) %></p>
 
 <% if @events_by_day && @events_by_day.any? %>
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
   <thead>
     <tr>
-      <th>Project</th>
-      <th>Date</th>
-      <th>User</th>
-      <th>Activity</th>
-      <th>Issue</th>
-      <th>Comment</th>
-      <th>Hours Spent</th>
+      <th><%= l(:field_project) %></th>
+      <th><%= l(:field_issue) %></th>
+      <th><%= l(:field_user) %></th>
+      <th><%= l(:field_comments) %></th>
+      <th><%= l(:label_spent_time) %></th>
     </tr>
   </thead>
   <tbody>
     <% @events_by_day.keys.sort.reverse.each do |day| %>
       <% @events_by_day[day].each do |e| -%>
-        <% if e.class.name == "TimeEntry" && (e.created_on.to_date == e.spent_on || e.spent_on == Date.yesterday) %>
+        <% if e.class.name == "TimeEntry" && e.spent_on == Date.yesterday %>
           <tr>
             <td><%= e.project.name %></td>
-            <td><%= e.spent_on %></td>
+            <td><%= link_to(e.issue.id.to_s + ': ' + e.issue.subject, 'http://redmine.a2a.net.ua' + issue_path(e.issue)) if e.issue.present? %></td>
             <td><%= e.user.name %></td>
-            <td><%= e.class.name %></td>
-            <td><%= e.issue.subject %></td>
-            <td><%= e.comments %></td>
+            <td><%= e.comments ? e.comments : '-' %></td>
             <td><%= e.hours %></td>
           </tr>
         <% end -%>
@@ -40,10 +35,19 @@
           </tr>
         <% end -%>
       <% end -%>
-      </dl>
     <% end -%>
+    <tr>
+      <td colspan="4"> Сумма часов за день: </td>
+      <td><%= @hours.to_s %></td>
+    </tr>
   </tbody>
 </table>
 <% else %>
   <%= content_tag('p', l(:label_no_data), :class => 'nodata') %>
 <% end -%>
+<p><%= 'По любым вопросам можно обращаться к разработчикам проекта ' + @project.name + ' :' %>
+  <ul>
+    <li>Евгений Сылка - e.sylka@a2a.co</li>
+    <li>Юрий Парамонов - yuri.paramonov@a2a.co</li>
+  </ul>
+</p>
