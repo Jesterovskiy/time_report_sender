@@ -43,7 +43,7 @@ module MailerPatch
       @hours = 0
       events.each {|e| @hours = @hours + e.hours if e.hours && (e.spent_on == Date.yesterday)}
 
-      mail :to => email, :subject => "Отчет по проекту #{@project.name} за #{format_date(@date_from)}."
+      mail :to => email.to_s, :subject => "Отчет по проекту #{@project.name} за #{format_date(@date_from)}."
     end
   end
 end
