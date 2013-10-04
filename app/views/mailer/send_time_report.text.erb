@@ -1,4 +1,4 @@
-<p class="subtitle"><%= 'Отчет использования времени по проекту ' + @project.name + ' за ' + format_date(@date_from) %></p>
+<p class="subtitle"><%= 'Отчет использования времени по проекту ' + @project.name + ' за ' + format_date(@date_from) + '.' %></p>
 
 <% if @events_by_day && @events_by_day.any? %>
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
@@ -19,8 +19,8 @@
             <td><%= e.project.name %></td>
             <td><%= link_to(e.issue.id.to_s + ': ' + e.issue.subject, 'http://redmine.a2a.net.ua' + issue_path(e.issue)) if e.issue.present? %></td>
             <td><%= e.user.name %></td>
-            <td><%= e.comments ? e.comments : '-' %></td>
-            <td><%= e.hours %></td>
+            <td><%= e.comments.present? ? e.comments : '-' %></td>
+            <td><%= e.hours.floor == e.hours ? e.hours.to_i : e.hours %></td>
           </tr>
         <% end -%>
         <% if e.class.name == "Issue" %>
@@ -38,7 +38,7 @@
     <% end -%>
     <tr>
       <td colspan="4"> Сумма часов за день: </td>
-      <td><%= @hours.to_s %></td>
+      <td><%= @hours.floor == @hours ? @hours.to_i : @hours %></td>
     </tr>
   </tbody>
 </table>
