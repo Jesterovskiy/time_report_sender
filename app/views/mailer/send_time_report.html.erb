@@ -1,6 +1,6 @@
 <p class="subtitle"><%= 'Отчет использования времени по проекту ' + @project.name + ' за ' + format_date(@date_from) + '.' %></p>
 
-<% if @events_by_day && @events_by_day.any? %>
+<% if @events_by_day && @events_by_day.any? && @hours != 0 %>
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
   <thead>
     <tr>
@@ -14,7 +14,7 @@
   <tbody>
     <% @events_by_day.keys.sort.reverse.each do |day| %>
       <% @events_by_day[day].each do |e| -%>
-        <% if e.class.name == "TimeEntry" && e.spent_on == Date.yesterday %>
+        <% if e.class.name == "TimeEntry" && (e.spent_on == Date.yesterday || e.spent_on == Date.yesterday - 2) %>
           <tr>
             <td><%= e.project.name %></td>
             <td><%= link_to(e.issue.id.to_s + ': ' + e.issue.subject, 'http://redmine.a2a.net.ua' + issue_path(e.issue)) if e.issue.present? %></td>

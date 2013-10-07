@@ -30,7 +30,7 @@ module MailerPatch
       @project = Project.find(Setting.plugin_time_report_sender['project_id'])
       @days = Setting.plugin_time_report_sender['days_back'].to_i || DAYS_BACK
       @date_to ||= Date.tomorrow
-      @date_from = @date_to - @days - 1
+      @date_from = Date.today.strftime('%a') == 'Mon' ? @date_to - @days - 3 : @date_to - @days - 1
       @with_subprojects = Setting.plugin_time_report_sender['include_subprojects'] || WITH_SUBPROJECTS
 
       activity = Redmine::Activity::Fetcher.new(@user, :project => @project,
@@ -41,7 +41,7 @@ module MailerPatch
       events = activity.events(@date_from, @date_to)
       @events_by_day = events.group_by {|event| @user.time_to_date(event.event_datetime)}
       @hours = 0
-      events.each {|e| @hours = @hours + e.hours if e.hours && (e.spent_on == Date.yesterday)}
+      events.each {|e| @hours = @hours + e.hours if e.hours && (e.spent_on == Date.yesterday || e.spent_on == Date.yesterday - 2)}
 
       mail :to => email.to_s, :subject => "Отчет по проекту #{@project.name} за #{format_date(@date_from)}."
     end
