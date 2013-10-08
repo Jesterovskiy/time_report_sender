@@ -47,7 +47,7 @@
 <% end -%>
 <p><%= 'По любым вопросам можно обращаться к разработчикам проекта ' + @project.name + ' :' %>
   <ul>
-    <li>Евгений Сылка - e.sylka@a2a.co</li>
-    <li>Юрий Парамонов - yuri.paramonov@a2a.co</li>
+    <li>Евгений Сылка - <%= mail_to('e.sylka@a2a.co') %></li>
+    <li>Юрий Парамонов - <%= mail_to('yuri.paramonov@a2a.co') %></li>
   </ul>
 </p>
